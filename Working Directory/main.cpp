@@ -222,15 +222,15 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------
 
     cout << endl;
-    cout << "-----------------------------------" << endl;
-    cout << "CHAI3D" << endl;
-    cout << "Demo: 08-shaders" << endl;
-    cout << "Copyright 2003-2016" << endl;
-    cout << "-----------------------------------" << endl << endl << endl;
-    cout << "Keyboard Options:" << endl << endl;
-    cout << "[f] - Enable/Disable full screen mode" << endl;
-    cout << "[m] - Enable/Disable vertical mirroring" << endl;
-    cout << "[q] - Exit application" << endl;
+    // cout << "-----------------------------------" << endl;
+    // cout << "CHAI3D" << endl;
+    // cout << "Demo: 08-shaders" << endl;
+    // cout << "Copyright 2003-2016" << endl;
+    // cout << "-----------------------------------" << endl << endl << endl;
+    // cout << "Keyboard Options:" << endl << endl;
+    // cout << "[f] - Enable/Disable full screen mode" << endl;
+    // cout << "[m] - Enable/Disable vertical mirroring" << endl;
+    // cout << "[q] - Exit application" << endl;
     cout << endl << endl;
 
     // parse first arg to try and locate resources
@@ -254,13 +254,13 @@ int main(int argc, char* argv[])
 
     // compute desired size of window
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    int space = 10;
-    int w = 0.8 * mode->height;
-    int h = 0.5 * mode->height;
-    int x0 = 0.5 * mode->width - w - space;
-    int y0 = 0.5 * (mode->height - h);
-    int x1 = 0.5 * mode->width + space;
-    int y1 = 0.5 * (mode->height - h);
+    // int space = 10;
+    // int w = 0.8 * mode->height;
+    // int h = 0.5 * mode->height;
+    // int x0 = 0.5 * mode->width - w - space;
+    // int y0 = 0.5 * (mode->height - h);
+    // int x1 = 0.5 * mode->width + space;
+    // int y1 = 0.5 * (mode->height - h);
 
     // set OpenGL version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -420,9 +420,9 @@ int main(int argc, char* argv[])
     camera->setFieldViewAngleDeg(60);
 
 
-    camera->setSphericalAzimuthDeg(-37.5);
-    camera->setSphericalPolarDeg(18);
-    camera->setSphericalRadius(2.0);
+    // camera->setSphericalAzimuthDeg(-37.5);
+    // camera->setSphericalPolarDeg(18);
+    // camera->setSphericalRadius(2.0);
 
 
     //--------------------------------------------------------------------------
