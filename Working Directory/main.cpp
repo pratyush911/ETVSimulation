@@ -1022,6 +1022,195 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
     {
         glfwSetWindowShouldClose(a_window, GLFW_TRUE);
     }
+    else if (a_key == GLFW_KEY_Z)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() + 0.01, d.y(), d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() + 0.01, d.y(), d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() + 0.01, d.y(), d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() + 0.01, d.y(), d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+    else if (a_key == GLFW_KEY_X)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+
+    else if (a_key == GLFW_KEY_C)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x(), d.y() + 0.01, d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+    else if (a_key == GLFW_KEY_V)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+
+    else if (a_key == GLFW_KEY_B)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x(), d.y() , d.z() + 0.01);
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        m_meshChoroidPlexus->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+    else if (a_key == GLFW_KEY_N)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshChoroidPlexus->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+
+
+    //checking rotation //Aditya
+    else if (a_key == GLFW_KEY_R)
+    {
+        rotate_x = rotate_x+5;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+        else if (a_key == GLFW_KEY_T)
+    {
+        rotate_x = rotate_x-5;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+        else if (a_key == GLFW_KEY_Y)
+    {
+        rotate_y = rotate_y+5;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+        else if (a_key == GLFW_KEY_U)
+    {
+        rotate_y = rotate_y-5;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+        else if (a_key == GLFW_KEY_I)
+    {
+        rotate_z = rotate_z+5;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+    else if (a_key == GLFW_KEY_O)
+    {
+        rotate_z = rotate_z-5;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+        else if (a_key == GLFW_KEY_E)
+    {
+        rotate_z = 0;
+        rotate_x = 0;
+        rotate_y = 0;
+        m_meshVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThirdVentricles->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshThalastriateVein->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+        m_meshChoroidPlexus->rotateExtrinsicEulerAnglesDeg(rotate_x, rotate_y, rotate_z, C_EULER_ORDER_XYZ);
+    }
+    else if (a_key == GLFW_KEY_L)
+    {
+        cVector3d pos;
+        hapticDevice->getPosition(pos);
+        cout<<"position :"<<pos<<endl;
+    }
 
     // option - toggle fullscreen
     else if (a_key == GLFW_KEY_F)
