@@ -1213,35 +1213,7 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
     }
 
     // option - toggle fullscreen
-    else if (a_key == GLFW_KEY_F)
-    {
-        // toggle state variable
-        fullscreen = !fullscreen;
-
-        // get handle to monitor
-        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-
-        // get information about monitor
-        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-
-        // set fullscreen or window mode
-        if (fullscreen)
-        {
-            glfwSetWindowMonitor(window0, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-            glfwSwapInterval(swapInterval);
-        }
-        else
-        {
-            int w = 0.8 * mode->height;
-            int h = 0.5 * mode->height;
-            int x = 0.5 * (mode->width - w);
-            int y = 0.5 * (mode->height - h);
-            glfwSetWindowMonitor(window0, NULL, x, y, w, h, mode->refreshRate);
-            glfwSwapInterval(swapInterval);
-        }
-    }
-
-    // option - toggle vertical mirroring
+    option - toggle vertical mirroring
     else if (a_key == GLFW_KEY_M)
     {
         mirroredDisplay = !mirroredDisplay;
