@@ -582,7 +582,21 @@ world->addChild(mesh);
 	//direction = tool->m_deviceLocalLinVel;
 
     // load an object file
+	bool fileload;
+    fileload = scope->loadFromFile(RESOURCE_PATH("../resources/models/endoscope/endoscope.3ds"));
 
+    if (!fileload)
+    {
+#if defined(_MSVC)
+        fileload = scope->loadFromFile("../../../bin/resources/models/endoscope/endoscope.3ds");
+#endif
+    }
+    if (!fileload)
+    {
+        cout << "Error - 3D Model failed to load correctly." << endl;
+        close();
+        return (-1);
+    }    
 
     // disable culling so that faces are rendered on both sides
     scope->setUseCulling(false);
@@ -643,6 +657,7 @@ world->addChild(mesh);
                                 cColorf(0.9f, 0.9f, 0.9f),
                                 cColorf(0.9f, 0.9f, 0.9f));
 
+    // create a frontground for the endoscope
     cBackground* frontground = new cBackground();
     cameraScope->m_frontLayer->addChild(frontground);
 
