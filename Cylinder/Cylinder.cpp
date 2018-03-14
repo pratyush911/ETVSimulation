@@ -69,7 +69,7 @@ bool fullscreen = false;
 // mirrored display
 bool mirroredDisplay = false;
 
-
+//Coordinated Movement
 //------------------------------------------------------------------------------
 // DECLARED VARIABLES
 //------------------------------------------------------------------------------
