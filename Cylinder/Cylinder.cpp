@@ -61,7 +61,7 @@ using namespace std;
     C_STEREO_PASSIVE_LEFT_RIGHT:  Passive stereo where L/R images are rendered next to each other
     C_STEREO_PASSIVE_TOP_BOTTOM:  Passive stereo where L/R images are rendered above each other
 */
-cStereoMode stereoMode = C_STEREO_DISABLED;
+cStereoMode stereoMode = C_STEREO_ENABLED;
 
 // fullscreen mode
 bool fullscreen = false;
@@ -408,7 +408,7 @@ int main(int argc, char* argv[])
     camera->setStereoMode(stereoMode);
 
     // set stereo eye separation and focal length (applies only if stereo is enabled)
-    camera->setStereoEyeSeparation(0.01);
+    camera->setStereoEyeSeparation(0);
     camera->setStereoFocalLength(0.5);
 
     // set vertical mirrored display mode
