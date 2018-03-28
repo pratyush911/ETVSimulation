@@ -643,9 +643,6 @@ world->addChild(mesh);
     background = new cBackground();
     camera->m_backLayer->addChild(background);
 
-    // // create a label to display the position of haptic device
-    // labelHapticDevicePosition = new cLabel(font);
-    // camera->m_frontLayer->addChild(labelHapticDevicePosition);
     
     // create a label to display the haptic and graphic rate of the simulation
     labelRates = new cLabel(font);
@@ -717,7 +714,78 @@ world->addChild(mesh);
         // get width and height of window
         glfwGetWindowSize(window, &width, &height);
 
-        -------------------------------------------------------------------
+        // render graphics
+        updateGraphics();
+
+        // swap buffers
+        glfwSwapBuffers(window);
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // RENDER WINDOW 1
+        ////////////////////////////////////////////////////////////////////////
+
+        // activate display context
+        glfwMakeContextCurrent(window1);
+
+        // get width and height of window
+        glfwGetWindowSize(window1, &width1, &height1);
+
+        // render graphics
+        updateGraphics1();
+
+        // swap buffers
+        glfwSwapBuffers(window1);
+
+
+        ////////////////////////////////////////////////////////////////////////
+        // FINALIZE
+        ////////////////////////////////////////////////////////////////////////
+
+        // process events
+        glfwPollEvents();
+
+        // signal frequency counter
+        freqCounterGraphics.signal(1);
+    }
+
+    // close window
+    glfwDestroyWindow(window);
+    glfwDestroyWindow(window1);
+
+    // terminate GLFW library
+    glfwTerminate();
+
+    // exit
+    return 0;
+}
+
+//------------------------------------------------------------------------------
+
+void windowSizeCallback(GLFWwindow* a_window, int a_width, int a_height)
+{
+    // update window size
+    width  = a_width;
+    height = a_height;
+
+    // update position of label
+    labelHapticDeviceModel->setLocalPos(20, height - 40, 0);
+
+    // update position of label
+    labelHapticDevicePosition->setLocalPos(20, height - 60, 0);
+}
+
+//------------------------------------------------------------------------------
+
+void windowSizeCallback1(GLFWwindow* a_window, int a_width, int a_height)
+{
+    // update window size
+    width1  = a_width;
+    height1 = a_height;
+
+}
+
+//------------------------------------------------------------------------------
 
 void errorCallback(int a_error, const char* a_description)
 {
