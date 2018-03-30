@@ -643,6 +643,9 @@ world->addChild(mesh);
     background = new cBackground();
     camera->m_backLayer->addChild(background);
 
+    // create a label to display the position of haptic device
+    labelHapticDevicePosition = new cLabel(font);
+    camera->m_frontLayer->addChild(labelHapticDevicePosition);
     
     // create a label to display the haptic and graphic rate of the simulation
     labelRates = new cLabel(font);
