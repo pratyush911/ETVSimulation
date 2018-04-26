@@ -1,3 +1,0 @@
-/home/vrl3/VR-Simulation/src/ETV-Simulation/bin/CMakeFiles/edit_cache.dir
-/home/vrl3/VR-Simulation/src/ETV-Simulation/bin/CMakeFiles/rebuild_cache.dir
-/home/vrl3/VR-Simulation/src/ETV-Simulation/bin/CMakeFiles/ETV_NSx.dir
