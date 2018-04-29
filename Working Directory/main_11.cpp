@@ -1488,7 +1488,7 @@ else if (a_key == GLFW_KEY_K)
 else if (a_key == GLFW_KEY_J)
 	{
 		calibrate3d(virPoint1, virPoint2, virPoint3, realPoint1, realPoint2, realPoint3);
-    cVector3d d(-0.89, -0.26, -1.29);
+    cVector3d d(-0.70, -0.16, -1.29);
     cMatrix3d m(-0.933013, -0.340224, -0.117195,0.25, -0.847116, 0.468929,-0.258819, 0.408218, 0.875426);
     m_meshVentricles->setLocalPos(d);
     m_meshThirdVentricles->setLocalPos(d);
@@ -1498,6 +1498,11 @@ else if (a_key == GLFW_KEY_J)
     m_meshThirdVentricles->setLocalRot(m);
     m_meshThalastriateVein->setLocalRot(m);
     m_meshChoroidPlexus->setLocalRot(m);
+    cVector3d d(-0.10, -0.12, -0.29);
+    m_meshVentricles->setLocalPos(d);
+    m_meshThirdVentricles->setLocalPos(d);
+    m_meshThalastriateVein->setLocalPos(d);
+    m_meshChoroidPlexus->setLocalPos(d);
 	}
 /*
 else if (a_key == GLFW_KEY_1)
