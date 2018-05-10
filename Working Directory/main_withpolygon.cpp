@@ -436,7 +436,7 @@ int main(int argc, char* argv[])
     camera->setStereoMode(stereoMode);
 
     // set stereo eye separation and focal length (applies only if stereo is enabled)
-    camera->setStereoEyeSeparation(0.0);//0.03
+    camera->setStereoEyeSeparation(0.03);
     camera->setStereoFocalLength(3.0);
 
     // set vertical mirrored display mode
@@ -1355,26 +1355,137 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
 	else if (a_key == GLFW_KEY_L)
 	{
 		cVector3d pos;
-    cMatrix3d m1,m2,m3,m4;
 		hapticDevice->getPosition(pos);
 		cout<<"position :"<<pos<<endl;
-    // cout<<m_meshVentricles->getLocalPos()<<endl;
-    // cout<<m_meshThirdVentricles->getLocalPos()<<endl;
-    // cout<<m_meshThalastriateVein->getLocalPos()<<endl;
-    // cout<<m_meshChoroidPlexus->getLocalPos()<<endl;
-    m1=m_meshVentricles->getLocalRot();
-    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
-    m1=m_meshThirdVentricles->getLocalRot();
-    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
-    m1=m_meshThalastriateVein->getLocalRot();
-    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
-    m1=m_meshChoroidPlexus->getLocalRot();
-    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
-    // cout<<m_meshThirdVentricles->getLocalRot()<<endl<<endl;
-    // cout<<m_meshThalastriateVeinVentricles->getLocalRot()<<endl<<endl;
-    // cout<<m_meshChoroidPlexus->getLocalRot()<<endl<<endl;
+    cout<<m_meshVentricles->getLocalPos()<<endl;
+    cout<<m_meshThirdVentricles->getLocalPos()<<endl;
+    cout<<m_meshThalastriateVein->getLocalPos()<<endl;
+    cout<<m_meshChoroidPlexus->getLocalPos()<<endl;
+    // cout<<m_meshVentricles->getLocalRot()<<endl;
+    // cout<<m_meshThirdVentricles->getLocalRot()<<endl;
+    // cout<<m_meshThalastriateVeinVentricles->getLocalRot()<<endl;
+    // cout<<m_meshChoroidPlexus->getLocalRot()<<endl;
+	}
+  else if (a_key == GLFW_KEY_7)
+	{
+		skull_scale += 0.5;
+    m_meshSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+    m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+		cout<<"scale :"<<skull_scale<<endl;
+	}
+  else if (a_key == GLFW_KEY_8)
+	{
+		skull_scale -= 0.5;
+    m_meshSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+    m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+		cout<<"scale :"<<skull_scale<<endl;
+	}
+  else if (a_key == GLFW_KEY_8)
+	{
+		rotateFlag = !(rotateFlag);
+	}
+	/*
+    else if (a_key == GLFW_KEY_P)
+	{
+	initialPos = meshEndoscope->getLocalPos();
+	cout<<"\n****************************************\n";
+	cout<<initialPos<<endl;
+	cout<<offsetPos<<endl;
+	offsetPos.sub(initialPos);
+	cout<<initialPos<<endl;
+	cout<<offsetPos<<endl;
+	cout<<"\n****************************************\n";
+	//cout<<"Orientation : "<<rotate_x<<" ,"<<rotate_y<<" ,"<<rotate_z<<endl;
+	cVector3d pos = meshEndoscope->getLocalPos();
+    cMatrix3d rot = meshEndoscope->getLocalRot();
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	cout<<"COORDINATES: "<<pos.get(0)<<", "<<pos.get(1)<<", "<<pos.get(2)<<", "<<endl;
+	//cout<<"ROTATION_X: "<<rot.get(0,0)<<", "<<rot.get(0,1)<<", "<<rot.get(0,2)<<", "<<endl;
+	//cout<<"ROTATION_Y: "<<rot.get(1,0)<<", "<<rot.get(1,1)<<", "<<rot.get(1,2)<<", "<<endl;
+	//cout<<"ROTATION_Z: "<<rot.get(2,0)<<", "<<rot.get(2,1)<<", "<<rot.get(2,2)<<", "<<endl;
+	cout<<"ROTATION_X: "<<rot.getCol0()<<endl;
+	cout<<"ROTATION_Y: "<<rot.getCol1()<<endl;
+	cout<<"ROTATION_Z: "<<rot.getCol2()<<endl;
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	}
+	else if (a_key == GLFW_KEY_W)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() + 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_S)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() - 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_A)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() - 1 , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_D)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() + 1 , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_I)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() , pos.z() - 1);
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_O)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() , pos.z() - 1);
+
+		meshEndoscope->setLocalPos(pos);
+    }
+*/
+
+// Updates on Thursday 26/2018
+else if (a_key == GLFW_KEY_H)
+	{
+		su = su + 0.1;
+		m_meshVentricles->scaleXYZ(su, su, su);
+		m_meshThirdVentricles->scaleXYZ(su, su, su);
+		m_meshThalastriateVein->scaleXYZ(su, su, su);
+		m_meshChoroidPlexus->scaleXYZ(su, su, su);
 	}
 
+else if (a_key == GLFW_KEY_K)
+	{
+		su = su - 0.1;
+		m_meshVentricles->scaleXYZ(su, su, su);
+		m_meshThirdVentricles->scaleXYZ(su, su, su);
+		m_meshThalastriateVein->scaleXYZ(su, su, su);
+		m_meshChoroidPlexus->scaleXYZ(su, su, su);
+	}
+
+else if (a_key == GLFW_KEY_J)
+	{
+		calibrate3d(virPoint1, virPoint2, virPoint3, realPoint1, realPoint2, realPoint3);
+    cVector3d d( -0.28, -0.26, -1.29);
+    m_meshVentricles->setLocalPos(d);
+    m_meshThirdVentricles->setLocalPos(d);
+    m_meshThalastriateVein->setLocalPos(d);
+    m_meshChoroidPlexus->setLocalPos(d);
+	}
 /*
 else if (a_key == GLFW_KEY_1)
 	{
@@ -1405,14 +1516,6 @@ else if (a_key == GLFW_KEY_Q)
 		hapticDevice->getPosition(realPoint2);
 	  cout<<"point 2 "<<realPoint2<<endl;
   }
-else if (a_key == GLFW_KEY_D)
-	{
-		// realPoint3 = meshEndoscope->getLocalPos();
-		// cout<<"point 3 "<<realPoint3<<endl;
-    // cVector3d realPoint3;
-		hapticDevice->getPosition(realPoint3);
-	  cout<<"point 3 "<<realPoint3<<endl;
-	}
 else if (a_key == GLFW_KEY_D)
 	{
 		// realPoint3 = meshEndoscope->getLocalPos();
