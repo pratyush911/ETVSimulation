@@ -1498,11 +1498,7 @@ else if (a_key == GLFW_KEY_J)
     m_meshThirdVentricles->setLocalRot(m);
     m_meshThalastriateVein->setLocalRot(m);
     m_meshChoroidPlexus->setLocalRot(m);
-    cVector3d d(-0.10, -0.12, -0.29);
-    m_meshVentricles->setLocalPos(d);
-    m_meshThirdVentricles->setLocalPos(d);
-    m_meshThalastriateVein->setLocalPos(d);
-    m_meshChoroidPlexus->setLocalPos(d);
+
 	}
 /*
 else if (a_key == GLFW_KEY_1)
