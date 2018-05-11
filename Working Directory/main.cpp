@@ -1,16 +1,16 @@
 
-
 //------------------------------------------------------------------------------
 #include "chai3d.h"
 //------------------------------------------------------------------------------
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include "GEL3D.h"
+#include <math.h>
 //------------------------------------------------------------------------------
 using namespace chai3d;
 using namespace std;
 //------------------------------------------------------------------------------
-
+#define PI 3.141592657
 //------------------------------------------------------------------------------
 // GENERAL SETTINGS
 //------------------------------------------------------------------------------
@@ -33,7 +33,26 @@ bool mirroredDisplay = false;
 bool switchtool = true;
 
 bool perforate = true;
+double rotate_x=0,rotate_y=0,rotate_z=0;
 
+double skull_scale = 1.0;
+
+bool rotateFlag = true;
+
+cVector3d initialPos;
+//cVector3d offsetPos(0.0853583, -0.86858, 0.513968);
+
+//cVector3d virPoint1, virPoint2, virPoint3;
+cVector3d realPoint1, realPoint2, realPoint3;
+
+// realPoint1 = 0.000....;
+// realPoint2 = 0.000....;
+// realPoint3 = 0.000....;
+
+
+cVector3d virPoint1(0.0324499, -0.030197, 0.0196008);
+cVector3d virPoint2(0.00112148, -0.00480966, 0.0376946);
+cVector3d virPoint3(-0.0271661, -0.0330365, 0.0254311);
 
 enum MouseStates
 {
@@ -42,6 +61,8 @@ enum MouseStates
     MOUSE_TRANSLATE_CAMERA
 };
 
+
+void calibrate3d(cVector3d a, cVector3d b,  cVector3d c, cVector3d A, cVector3d B, cVector3d C);
 
 //------------------------------------------------------------------------------
 // DECLARED VARIABLES
@@ -77,6 +98,9 @@ cGenericHapticDevicePtr hapticDevice;
 double deviceRadius;
 //cToolCursor* _device;
 
+// Updates on 26/2018
+double su = 1;
+
 // objects in the scene
 // deformable world
 cGELWorld* defWorld;
@@ -84,6 +108,7 @@ cGELMesh* m_meshThirdVentricles;
 cMultiMesh* m_meshVentricles;
 cMultiMesh* m_meshChoroidPlexus;
 cMultiMesh* m_meshThalastriateVein;
+cMultiMesh* m_meshSkull;
 
 
 cVoxelObject* m_voxelBrainSkull;
@@ -222,15 +247,15 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------
 
     cout << endl;
-    // cout << "-----------------------------------" << endl;
-    // cout << "CHAI3D" << endl;
-    // cout << "Demo: 08-shaders" << endl;
-    // cout << "Copyright 2003-2016" << endl;
-    // cout << "-----------------------------------" << endl << endl << endl;
-    // cout << "Keyboard Options:" << endl << endl;
-    // cout << "[f] - Enable/Disable full screen mode" << endl;
-    // cout << "[m] - Enable/Disable vertical mirroring" << endl;
-    // cout << "[q] - Exit application" << endl;
+    cout << "-----------------------------------" << endl;
+    cout << "CHAI3D" << endl;
+    cout << "Demo: 08-shaders" << endl;
+    cout << "Copyright 2003-2016" << endl;
+    cout << "-----------------------------------" << endl << endl << endl;
+    cout << "Keyboard Options:" << endl << endl;
+    cout << "[f] - Enable/Disable full screen mode" << endl;
+    cout << "[m] - Enable/Disable vertical mirroring" << endl;
+    cout << "[q] - Exit application" << endl;
     cout << endl << endl;
 
     // parse first arg to try and locate resources
@@ -254,13 +279,13 @@ int main(int argc, char* argv[])
 
     // compute desired size of window
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    // int space = 10;
-    // int w = 0.8 * mode->height;
-    // int h = 0.5 * mode->height;
-    // int x0 = 0.5 * mode->width - w - space;
-    // int y0 = 0.5 * (mode->height - h);
-    // int x1 = 0.5 * mode->width + space;
-    // int y1 = 0.5 * (mode->height - h);
+    int space = 10;
+    int w = 0.8 * mode->height;
+    int h = 0.5 * mode->height;
+    int x0 = 0.5 * mode->width - w - space;
+    int y0 = 0.5 * (mode->height - h);
+    int x1 = 0.5 * mode->width + space;
+    int y1 = 0.5 * (mode->height - h);
 
     // set OpenGL version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -420,9 +445,9 @@ int main(int argc, char* argv[])
     camera->setFieldViewAngleDeg(60);
 
 
-    // camera->setSphericalAzimuthDeg(-37.5);
-    // camera->setSphericalPolarDeg(18);
-    // camera->setSphericalRadius(2.0);
+    camera->setSphericalAzimuthDeg(-37.5);
+    camera->setSphericalPolarDeg(18);
+    camera->setSphericalRadius(2.0);
 
 
     //--------------------------------------------------------------------------
@@ -592,7 +617,7 @@ int main(int argc, char* argv[])
     m_meshVentricles->computeBoundaryBox(true);
     m_meshVentricles->m_meshes->at(0)->m_material->setWhite();
     m_meshVentricles->m_meshes->at(0)->m_material->setShininess(100);
-    m_meshVentricles->m_meshes->at(0)->m_material->setTextureLevel(0.9);    
+    m_meshVentricles->m_meshes->at(0)->m_material->setTextureLevel(0.9);
     cNormalMapPtr normalMap_LateralVentricle = cNormalMap::create();
     fileload = normalMap_LateralVentricle->loadFromFile("/home/vrl3/VR-Simulation/Data/mesh_models/ventricle_texture_NORM.png");
     m_meshVentricles->m_meshes->at(0)->m_normalMap = normalMap_LateralVentricle;
@@ -617,7 +642,7 @@ int main(int argc, char* argv[])
     m_meshThalastriateVein->m_meshes->at(0)->setUseTexture(false);
     m_meshThalastriateVein->m_meshes->at(0)->m_material->setRedDark();
     m_meshThalastriateVein->m_meshes->at(0)->m_material->setShininess(100);
-    m_meshThalastriateVein->m_meshes->at(0)->m_material->setTextureLevel(0.9);    
+    m_meshThalastriateVein->m_meshes->at(0)->m_material->setTextureLevel(0.9);
     m_meshThalastriateVein->computeBTN();
     m_meshThalastriateVein->getMesh(0)->setUseTransparency(true);
     m_meshThalastriateVein->getMesh(0)->setTransparencyLevel(0.8);
@@ -639,7 +664,7 @@ int main(int argc, char* argv[])
     m_meshChoroidPlexus->computeBoundaryBox(true);
     m_meshChoroidPlexus->m_meshes->at(0)->m_material->setWhite();
     m_meshChoroidPlexus->m_meshes->at(0)->m_material->setShininess(100);
-    m_meshChoroidPlexus->m_meshes->at(0)->m_material->setTextureLevel(0.9);    
+    m_meshChoroidPlexus->m_meshes->at(0)->m_material->setTextureLevel(0.9);
     m_meshChoroidPlexus->computeBTN();
     m_meshChoroidPlexus->setLocalPos(cVector3d(0.19, -0.04, -0.24));
     //m_meshChoroidPlexus->getMesh(0)->setUseTransparency(true);
@@ -709,7 +734,8 @@ int main(int argc, char* argv[])
 
     // *************************************** Add the volume and skull model *************************************************************************
     m_voxelBrainSkull = new cVoxelObject();
-    m_voxelBrainSkull->setLocalPos(0.0, 0.0, 0.0);
+    // m_voxelBrainSkull->setLocalPos(0.0, 0.0, 0.0);
+    m_voxelBrainSkull->setLocalPos(0.0, -0.1, 0.2);
     m_voxelBrainSkull->m_minCorner.set(-0.5, -0.5, -0.5);
     m_voxelBrainSkull->m_maxCorner.set(0.5, 0.220703125, 0.5);
     m_voxelBrainSkull->m_minTextureCoord.set(0.0, 0.0, 0.0);
@@ -735,7 +761,8 @@ int main(int argc, char* argv[])
 
     //!
     //! Load the data
-    int filesloaded = m_imagesBrainSkull->loadFromFiles("/home/vrl3/VR-Simulation/Data/skull/png/brain-0", "png", 512);
+    //int filesloaded = m_imagesBrainSkull->loadFromFiles("/home/vrl3/VR-Simulation/Data/skull/png/brain-0", "png", 512);
+    int filesloaded = m_imagesBrainSkull->loadFromFiles("/home/vrl3/VR-Simulation/Data/Data_Model_printed/png/000", "png", 220);
     if (filesloaded == 0)
     {
         cout << "Failed to load volume data.Make sure folder contains files in the form 0XXX.png" << endl;
@@ -764,7 +791,22 @@ int main(int argc, char* argv[])
     m_voxelBrainSkull->m_material->setDynamicFriction(0.0);
     m_voxelBrainSkull->rotateAboutLocalAxisDeg(1, 0, 0, 90);
     //m_voxelBrainSkull->createAABBCollisionDetector(0.01);
+    m_meshSkull = new cMultiMesh();
+    m_voxelBrainSkull -> polygonize     (     m_meshSkull,-1.0,-1.0,-1.0);
     world->addChild(m_voxelBrainSkull);
+    // m_meshSkull->setUseCulling(true, true);
+
+    // m_meshSkull->scaleXYZ(1 /235.0, 1 / 235.0, 1 / 235.0);
+    // compute a boundary box
+    // m_meshSkull->computeBoundaryBox(true);
+    // m_meshSkull->m_meshes->at(0)->m_material->setWhite();
+    // m_meshSkull->m_meshes->at(0)->m_material->setShininess(100);
+    // m_meshSkull->m_meshes->at(0)->m_material->setTextureLevel(0.9);
+    // cNormalMapPtr normalMap_LateralVentricle = cNormalMap::create();
+    // fileload = normalMap_LateralVentricle->loadFromFile("/home/vrl3/VR-Simulation/Data/mesh_models/ventricle_texture_NORM.png");
+    // m_meshVentricles->m_meshes->at(0)->m_normalMap = normalMap_LateralVentricle;
+    // m_meshSkull->computeBTN();
+    // m_meshSkull->setLocalPos(cVector3d(0.19, -0.04, -0.24));
     // ****************************************************************************************************************************************
 
 
@@ -772,6 +814,15 @@ int main(int argc, char* argv[])
     // create a virtual mesh
     meshEndoscope = new cMultiMesh();
     world->addChild(meshEndoscope);
+
+    initialPos = meshEndoscope->getLocalPos();
+    //cout<<"\n****************************************\n";
+    //cout<<initialPos<<endl;
+    //cout<<offsetPos<<endl;
+    //offsetPos.sub(initialPos);
+    //cout<<initialPos<<endl;
+    //cout<<offsetPos<<endl;
+    //cout<<"\n****************************************\n";
 
     // load an object file
     fileload = meshEndoscope->loadFromFile("/home/vrl3/VR-Simulation/Data/endoscope.3ds");
@@ -791,8 +842,11 @@ int main(int argc, char* argv[])
     // use display list for faster rendering
     meshEndoscope->setUseDisplayList(true);
 
+
     // position object in scene
     meshEndoscope->rotateExtrinsicEulerAnglesDeg(0, 0, 0, C_EULER_ORDER_XYZ);
+    cVector3d z_axis_1(0.0,0.0,1.0);
+    meshEndoscope->rotateAboutGlobalAxisDeg(z_axis_1,-90.0);
 
     cameraEndoScope = new cCamera(world);
     meshEndoscope->addChild(cameraEndoScope);
@@ -803,7 +857,10 @@ int main(int argc, char* argv[])
 
 
     //meshEndoscope->setShowFrame(true);
-    cameraEndoScope->setLocalPos(cVector3d(-0.001, 0, 0.001));
+    cameraEndoScope->setLocalPos(cVector3d(0.0, 0, 0.0));//(-0.001,0.0,0.001)
+    //**cVector3d pos = meshEndoscope->getLocalPos();**//
+
+    //**cameraEndoScope->setLocalPos(pos);**//
     //m_meshThirdVentricles->setShowFrame(true);
     // ***************************************************************************************************************************
 
@@ -878,7 +935,7 @@ int main(int argc, char* argv[])
 
     // create a font
     font = NEW_CFONTCALIBRI20();
-    
+
     // create a label to display the haptic and graphic rate of the simulation
     labelRates = new cLabel(font);
     camera->m_frontLayer->addChild(labelRates);
@@ -908,10 +965,12 @@ int main(int argc, char* argv[])
         close();
         return (-1);
     }
+
     //--------------------------------------------------------------------------
     // START SIMULATION
     //--------------------------------------------------------------------------
     // create a thread which starts the main haptics rendering loop
+
     hapticsThread = new cThread();
     hapticsThread->start(updateHaptics, CTHREAD_PRIORITY_HAPTICS);
 
@@ -948,7 +1007,7 @@ int main(int argc, char* argv[])
 
 
         ////////////////////////////////////////////////////////////////////////
-        // RENDER WINDOW 1
+        // RENDER WINDOW 1m_voxelBrainSkull->scaleXYZ(scaling_factor,scaling_factor,scaling_factor);
         ////////////////////////////////////////////////////////////////////////
 
         // activate display context
@@ -1017,10 +1076,97 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
         return;
     }
 
+    /*
     // option - exit
     else if ((a_key == GLFW_KEY_ESCAPE) || (a_key == GLFW_KEY_Q))
     {
         glfwSetWindowShouldClose(a_window, GLFW_TRUE);
+    }
+
+    // option - toggle fullscreen
+    else if (a_key == GLFW_KEY_F)
+    {
+        // toggle state variable
+        fullscreen = !fullscreen;
+
+        // get handle to monitor
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+        // get information about monitor
+        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+        // set fullscreen or window mode
+        if (fullscreen)
+        {
+            glfwSetWindowMonitor(window0, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+            glfwSwapInterval(swapInterval);
+        }
+        else
+        {
+            int w = 0.8 * mode->height;
+            int h = 0.5 * mode->height;
+            int x = 0.5 * (mode->width - w);
+            int y = 0.5 * (mode->height - h);
+            glfwSetWindowMonitor(window0, NULL, x, y, w, h, mode->refreshRate);
+            glfwSwapInterval(swapInterval);
+        }
+    }
+
+    // option - toggle vertical mirroring
+    else if (a_key == GLFW_KEY_M)
+    {
+        mirroredDisplay = !mirroredDisplay;
+        camera->setMirrorVertical(mirroredDisplay);
+    }
+    else if (a_key == GLFW_KEY_1)
+    {
+        voxelBrainSkullOpacityThreshold -= 0.03;
+        m_voxelBrainSkull->setOpacityThreshold(voxelBrainSkullOpacityThrm_voxelBrainSkull->scaleXYZ(scaling_factor,scaling_factor,scaling_factor);eshold);
+    }
+    else if (a_key == GLFW_KEY_2)
+    {
+        voxelBrainSkullOpacityThreshold += 0.03;
+        m_voxelBrainSkull->setOpacityThreshold(voxelBrainSkullOpacityThreshold);
+    }
+    else if (a_key == GLFW_KEY_3)
+    {
+        world->addChild(m_voxelBrainSkull);
+    }
+    */
+    else if (a_key == GLFW_KEY_4)
+    {
+        world->removeChild(m_voxelBrainSkull);
+    }
+
+    else if (a_key == GLFW_KEY_5)
+    {
+        world->removeChild(m_voxelBrainSkull);
+        world->addChild(defWorld);
+        world->addChild(m_voxelBrainSkull);
+    }
+    else if (a_key == GLFW_KEY_6)
+    {
+        world->removeChild(defWorld);
+    }
+    else if(a_key == GLFW_KEY_S)
+    {
+        switchtool = !switchtool;
+        if(switchtool)
+        {
+            world->addChild(meshEndoscope);
+            //*world->addChild(cameraEndoScope);//**
+            world->removeChild(drillTool);
+        }
+        else
+        {
+            world->addChild(drillTool);
+            //*world->removeChild(meshEndoscope);
+            world->removeChild(cameraEndoScope);
+        }
+    }
+    else if (a_key == GLFW_KEY_P)
+    {
+        perforate = !perforate;
     }
     else if (a_key == GLFW_KEY_Z)
     {
@@ -1211,183 +1357,164 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
         hapticDevice->getPosition(pos);
         cout<<"position :"<<pos<<endl;
     }
-
-    // option - toggle fullscreen
-    option - toggle vertical mirroring
-    else if (a_key == GLFW_KEY_M)
+  else if (a_key == GLFW_KEY_7)
     {
-        mirroredDisplay = !mirroredDisplay;
-        camera->setMirrorVertical(mirroredDisplay);
+        skull_scale += 0.5;
+    m_voxelBrainSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+    m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+        cout<<"scale :"<<skull_scale<<endl;
     }
-    else if (a_key == GLFW_KEY_1)
+  else if (a_key == GLFW_KEY_8)
     {
-        voxelBrainSkullOpacityThreshold -= 0.03;
-        m_voxelBrainSkull->setOpacityThreshold(voxelBrainSkullOpacityThreshold);
+        skull_scale -= 0.5;
+    m_voxelBrainSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+    m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+        cout<<"scale :"<<skull_scale<<endl;
     }
-    else if (a_key == GLFW_KEY_2)
+  else if (a_key == GLFW_KEY_8)
     {
-        voxelBrainSkullOpacityThreshold += 0.03;
-        m_voxelBrainSkull->setOpacityThreshold(voxelBrainSkullOpacityThreshold);
+        rotateFlag = !(rotateFlag);
     }
-    else if (a_key == GLFW_KEY_3)
-    {
-        world->addChild(m_voxelBrainSkull);
-    }
-    else if (a_key == GLFW_KEY_4)
-    {
-        world->removeChild(m_voxelBrainSkull);
-    }
-    else if (a_key == GLFW_KEY_5)
-    {
-        world->removeChild(m_voxelBrainSkull);
-        world->addChild(defWorld);
-        world->addChild(m_voxelBrainSkull);
-    }
-    else if (a_key == GLFW_KEY_6)
-    {
-        world->removeChild(defWorld);
-    }
-    else if(a_key == GLFW_KEY_S)
-    {
-        switchtool = !switchtool;
-        if(switchtool)
-        {
-            world->addChild(meshEndoscope);
-            world->removeChild(drillTool);
-        }
-        else
-        {
-            world->addChild(drillTool);
-            world->removeChild(meshEndoscope);
-        }
-    }
+    /*
     else if (a_key == GLFW_KEY_P)
     {
-        perforate = !perforate;
+    initialPos = meshEndoscope->getLocalPos();
+    cout<<"\n****************************************\n";
+    cout<<initialPos<<endl;
+    cout<<offsetPos<<endl;
+    offsetPos.sub(initialPos);
+    cout<<initialPos<<endl;
+    cout<<offsetPos<<endl;
+    cout<<"\n****************************************\n";
+    //cout<<"Orientation : "<<rotate_x<<" ,"<<rotate_y<<" ,"<<rotate_z<<endl;
+    cVector3d pos = meshEndoscope->getLocalPos();
+    cMatrix3d rot = meshEndoscope->getLocalRot();
+    cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+    cout<<"COORDINATES: "<<pos.get(0)<<", "<<pos.get(1)<<", "<<pos.get(2)<<", "<<endl;
+    //cout<<"ROTATION_X: "<<rot.get(0,0)<<", "<<rot.get(0,1)<<", "<<rot.get(0,2)<<", "<<endl;
+    //cout<<"ROTATION_Y: "<<rot.get(1,0)<<", "<<rot.get(1,1)<<", "<<rot.get(1,2)<<", "<<endl;
+    //cout<<"ROTATION_Z: "<<rot.get(2,0)<<", "<<rot.get(2,1)<<", "<<rot.get(2,2)<<", "<<endl;
+    cout<<"ROTATION_X: "<<rot.getCol0()<<endl;
+    cout<<"ROTATION_Y: "<<rot.getCol1()<<endl;
+    cout<<"ROTATION_Z: "<<rot.getCol2()<<endl;
+    cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
     }
-    else if (a_key == GLFW_KEY_Z)
+    else if (a_key == GLFW_KEY_W)
     {
-        cVector3d d = m_meshVentricles->getLocalPos();
-        d = cVector3d(d.x() + 0.01, d.y(), d.z());
-        m_meshVentricles->setLocalPos(d);
+        cVector3d pos = meshEndoscope->getLocalPos();
 
-        d = m_meshThirdVentricles->getLocalPos();
-        d = cVector3d(d.x() + 0.01, d.y(), d.z());
-        m_meshThirdVentricles->setLocalPos(d);
+        pos = cVector3d(pos.x() + 1 , pos.y() , pos.z());
 
-        d = m_meshThalastriateVein->getLocalPos();
-        d = cVector3d(d.x() + 0.01, d.y(), d.z());
-        m_meshThalastriateVein->setLocalPos(d);
-
-
-        d = m_meshChoroidPlexus->getLocalPos();
-        d = cVector3d(d.x() + 0.01, d.y(), d.z());
-        m_meshChoroidPlexus->setLocalPos(d);
-        cout << "d " << d << endl;
+        meshEndoscope->setLocalPos(pos);
     }
-    else if (a_key == GLFW_KEY_X)
+    else if (a_key == GLFW_KEY_S)
     {
-        cVector3d d = m_meshVentricles->getLocalPos();
-        d = cVector3d(d.x() - 0.01, d.y(), d.z());
-        m_meshVentricles->setLocalPos(d);
+        cVector3d pos = meshEndoscope->getLocalPos();
 
-        d = m_meshThirdVentricles->getLocalPos();
-        d = cVector3d(d.x() - 0.01, d.y(), d.z());
-        m_meshThirdVentricles->setLocalPos(d);
+        pos = cVector3d(pos.x() - 1 , pos.y() , pos.z());
 
-        d = m_meshThalastriateVein->getLocalPos();
-        d = cVector3d(d.x() - 0.01, d.y(), d.z());
-        m_meshThalastriateVein->setLocalPos(d);
-
-
-        d = m_meshChoroidPlexus->getLocalPos();
-        d = cVector3d(d.x() - 0.01, d.y(), d.z());
-        m_meshChoroidPlexus->setLocalPos(d);
-        cout << "d " << d << endl;
+        meshEndoscope->setLocalPos(pos);
     }
-
-    else if (a_key == GLFW_KEY_C)
+    else if (a_key == GLFW_KEY_A)
     {
-        cVector3d d = m_meshVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() + 0.01, d.z());
-        m_meshVentricles->setLocalPos(d);
+        cVector3d pos = meshEndoscope->getLocalPos();
 
-        d = m_meshThirdVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() + 0.01, d.z());
-        m_meshThirdVentricles->setLocalPos(d);
+        pos = cVector3d(pos.x() , pos.y() - 1 , pos.z());
 
-        d = m_meshThalastriateVein->getLocalPos();
-        d = cVector3d(d.x(), d.y() + 0.01, d.z());
-        m_meshThalastriateVein->setLocalPos(d);
-
-
-        d = m_meshChoroidPlexus->getLocalPos();
-        d = cVector3d(d.x() , d.y() + 0.01, d.z());
-        m_meshChoroidPlexus->setLocalPos(d);
-        cout << "d " << d << endl;
+        meshEndoscope->setLocalPos(pos);
     }
-    else if (a_key == GLFW_KEY_V)
+    else if (a_key == GLFW_KEY_D)
     {
-        cVector3d d = m_meshVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() - 0.01, d.z());
-        m_meshVentricles->setLocalPos(d);
+        cVector3d pos = meshEndoscope->getLocalPos();
 
-        d = m_meshThirdVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() - 0.01, d.z());
-        m_meshThirdVentricles->setLocalPos(d);
+        pos = cVector3d(pos.x() , pos.y() + 1 , pos.z());
 
-        d = m_meshThalastriateVein->getLocalPos();
-        d = cVector3d(d.x() , d.y() - 0.01, d.z());
-        m_meshThalastriateVein->setLocalPos(d);
-
-
-        d = m_meshChoroidPlexus->getLocalPos();
-        d = cVector3d(d.x() , d.y() - 0.01, d.z());
-        m_meshChoroidPlexus->setLocalPos(d);
-        cout << "d " << d << endl;
+        meshEndoscope->setLocalPos(pos);
     }
-
-    else if (a_key == GLFW_KEY_B)
+    else if (a_key == GLFW_KEY_I)
     {
-        cVector3d d = m_meshVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
-        m_meshVentricles->setLocalPos(d);
+        cVector3d pos = meshEndoscope->getLocalPos();
 
-        d = m_meshThirdVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
-        m_meshThirdVentricles->setLocalPos(d);
+        pos = cVector3d(pos.x() , pos.y() , pos.z() - 1);
 
-        d = m_meshThalastriateVein->getLocalPos();
-        d = cVector3d(d.x(), d.y() , d.z() + 0.01);
-        m_meshThalastriateVein->setLocalPos(d);
-
-
-        d = m_meshChoroidPlexus->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
-        m_meshChoroidPlexus->setLocalPos(d);
-        cout << "d " << d << endl;
+        meshEndoscope->setLocalPos(pos);
     }
-    else if (a_key == GLFW_KEY_N)
+    else if (a_key == GLFW_KEY_O)
     {
-        cVector3d d = m_meshVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
-        m_meshVentricles->setLocalPos(d);
+        cVector3d pos = meshEndoscope->getLocalPos();
 
-        d = m_meshThirdVentricles->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
-        m_meshThirdVentricles->setLocalPos(d);
+        pos = cVector3d(pos.x() , pos.y() , pos.z() - 1);
 
-        d = m_meshThalastriateVein->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
-        m_meshThalastriateVein->setLocalPos(d);
-
-
-        d = m_meshChoroidPlexus->getLocalPos();
-        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
-        m_meshChoroidPlexus->setLocalPos(d);
-        cout << "d " << d << endl;
+        meshEndoscope->setLocalPos(pos);
     }
+*/
+
+// Updates on Thursday 26/2018
+else if (a_key == GLFW_KEY_H)
+    {
+        su = su + 0.1;
+        m_meshVentricles->scaleXYZ(su, su, su);
+        m_meshThirdVentricles->scaleXYZ(su, su, su);
+        m_meshThalastriateVein->scaleXYZ(su, su, su);
+        m_meshChoroidPlexus->scaleXYZ(su, su, su);
+    }
+
+else if (a_key == GLFW_KEY_K)
+    {
+        su = su - 0.1;
+        m_meshVentricles->scaleXYZ(su, su, su);
+        m_meshThirdVentricles->scaleXYZ(su, su, su);
+        m_meshThalastriateVein->scaleXYZ(su, su, su);
+        m_meshChoroidPlexus->scaleXYZ(su, su, su);
+    }
+
+else if (a_key == GLFW_KEY_J)
+    {
+        calibrate3d(virPoint1, virPoint2, virPoint3, realPoint1, realPoint2, realPoint3);
+    }
+/*
+else if (a_key == GLFW_KEY_1)
+    {
+        meshEndoscope->setLocalPos(virPoint1);
+    }
+else if (a_key == GLFW_KEY_2)
+    {
+        meshEndoscope->setLocalPos(virPoint2);
+    }
+else if (a_key == GLFW_KEY_3)
+    {
+        meshEndoscope->setLocalPos(virPoint3);
+    }
+*/
+else if (a_key == GLFW_KEY_A)
+    {
+        // realPoint1 = meshEndoscope->getLocalPos();
+        // cout<<"point 1 "<<realPoint1<<endl;
+    // cVector3d realPoint1;
+        hapticDevice->getPosition(realPoint1);
+      cout<<"point 1 "<<realPoint1<<endl;
+    }
+else if (a_key == GLFW_KEY_Q)
+    {
+        // realPoint2 = meshEndoscope->getLocalPos();
+        // cout<<"point 2 "<<realPoint2<<endl;
+    // cVector3d realPoint2;
+        hapticDevice->getPosition(realPoint2);
+      cout<<"point 2 "<<realPoint2<<endl;
+  }
+else if (a_key == GLFW_KEY_D)
+    {
+        // realPoint3 = meshEndoscope->getLocalPos();
+        // cout<<"point 3 "<<realPoint3<<endl;
+    // cVector3d realPoint3;
+        hapticDevice->getPosition(realPoint3);
+      cout<<"point 3 "<<realPoint3<<endl;
+    }
+
+
+// Updates on Thirsday 26/2018 ends
 }
+
 
 //------------------------------------------------------------------------------
 
@@ -1571,14 +1698,43 @@ void updateHaptics(void)
         cMatrix3d rot;
         hapticDevice->getPosition(pos);
         hapticDevice->getRotation(rot);
-        pos.mul(workspaceScaleFactor);
+
+    //cVector3d offsetPos(0.0853583, -0.86858, 0.513968);
+    cVector3d temp(0.0,0.0,0.0);//change made on 13 march
+    //temp.x(1);
+    //rot.setCol0(temp);
+    //temp.x(0);
+    //temp.y(1);
+    //rot.setCol1(temp);
+    //temp.y(0);
+
+
+    //cMatrix3d offsetRot(0.0497357, -0.886516, 0.460018, 0.964903, -0.0762627, -0.251291, 0, 0, 1);
+    cVector3d z_axis(0.0,0.0,1.0);
+
+    cVector3d zero(0.0, 0.0, 0.0);
+
+  if(!(rotateFlag)){
+       temp.z(1);
+       rot.setCol2(temp);
+  }
+
+    pos.mul(workspaceScaleFactor);
         //cout << "workspaceScaleFactor " << workspaceScaleFactor << endl;
         //device->setLocalPos(pos);
-        //_device->setLocalPos(pos);
+        //device->setLocalPos(pos);
         if(switchtool)
         {
+            //cout<<"\n------------------------------------------------------------------------------------------------\n";
+            //cout<<offsetPos;
+            //cout<<"\n------------------------------------------------------------------------------------------------\n";
+            //pos.add(offsetPos);//update on
+            //rot.mul(offsetRot);
             meshEndoscope->setLocalPos(pos);
+            //**cameraEndoScope->setLocalPos(pos);**//
             meshEndoscope->setLocalRot(rot);
+            //**cameraEndoScope->setLocalRot(rotCamera);**//
+            //meshEndoscope->rotateAboutGlobalAxisDeg(z_axis,-90.0);//rotation to get endoscope right
         }
         else
         {
@@ -1614,7 +1770,17 @@ void updateHaptics(void)
         }
         // signal frequency counter
         freqCounterHaptics.signal(1);
+    //==========================getting points of calibration==================
+        // read user-switch status (button 0)
+        bool button;
+        hapticDevice->getUserSwitch(0, button);
+    if(button){
+        // hapticDevice->getPosition(pos);
+        // hapticDevice->getRotation(rot);
+        // cout<<"positon "<<pos<<endl;
     }
+    }
+
     // exit haptics thread
     simulationFinished = true;
 }
@@ -1681,4 +1847,158 @@ void BuildDynamicModel()
         newLink = new cGELSkeletonLink(prevNode, newNode); m_meshThirdVentricles->m_links.push_front(newLink);
     }
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////CALIBRATION CODE STARTS HERE//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+cVector3d normal_find(cVector3d a,cVector3d b,cVector3d c) {
+cVector3d dir0((a.x() - b.x()), (a.y() - b.y()), (a.z() - b.z()) );
+cVector3d dir1((c.x() - b.x()), (c.y() - b.y()), (c.z() - b.z()) );
+cVector3d norm;
+dir1.crossr(dir0, norm);
+
+return norm;
+
+}
+
+cMatrix3d rotateNorm(cVector3d a,cVector3d b,cVector3d c,cVector3d A,cVector3d B,cVector3d C){ // a,b,c virtual skull ,ABC physical skull
+    cVector3d unit1,unit2,cross,dot, cross_normalise;
+    double sint,cost;
+
+    unit1 = normal_find(a,b,c);
+    unit2 = normal_find(A,B,C);
+    unit1.normalize();
+    unit2.normalize();
+    unit1.crossr(unit2,cross);
+    cross_normalise = cross;
+    cross_normalise.normalize();
+    cost = unit1.dot(unit2);
+    sint = cross.x()/ cross_normalise.x();
+    double v1, v2, v3;
+    v1 = cross.x();
+    v2 = cross.y();
+    v3 = cross.z();
+    cMatrix3d vx(0, -v3, v2, v3, 0, -v1, -v2, v1, 0);
+    cMatrix3d i, vx_2, result;
+    i.identity();
+    vx.mulr(vx, vx_2);
+    i.addr(vx, result);
+    vx_2*=(1/1+cost);
+    result.add(vx_2);
+
+    return result;
+
+
+
+}
+
+double scale1(cVector3d a,cVector3d b, cVector3d c, cVector3d A,cVector3d B, cVector3d C){
+    //double scale;
+    //scale = (A.x() - B.x())/(a.x() - b.x());
+    double distV;
+    distV = cDistance(a, b);
+  cout<<"Dist ab: "<<distV<<endl;
+    double distR;
+    distR = cDistance(A, B);
+  cout<<"Dist AB: "<<distR<<endl;
+    double scale_1 =  (distR/distV);
+    distV = cDistance(c, b);
+    distR = cDistance(C, B);
+  cout<<"Dist cb: "<<distV<<endl;
+  cout<<"Dist CB: "<<distR<<endl;
+    double scale_2 =  (distR/distV);
+    distV = cDistance(a, c);
+    distR = cDistance(A, C);
+  cout<<"Dist ac: "<<distV<<endl;
+  cout<<"Dist AC: "<<distR<<endl;
+    double scale_3 =  (distR/distV);
+    return (scale_1 + scale_2 + scale_3)/3;
+}
+
+
+cVector3d translate1(cVector3d a,cVector3d A){
+    cVector3d trans;
+    A.subr(a,trans);
+    return trans;
+}
+
+cMatrix3d rotatePlan(cVector3d A,cVector3d b,cVector3d B,cVector3d normal){
+    cVector3d dir1,dir2;
+    b.subr(A,dir1);
+    B.subr(A,dir2);
+    dir1.normalize();
+    dir2.normalize();
+    double cosvalue,angleradian;
+    cosvalue = dir1.dot(dir2);
+    angleradian = acos(cosvalue);
+    cMatrix3d result;
+    result = cRotAxisAngleRad(normal.x(),normal.y(),normal.z(),angleradian);
+    return result;
+}
+
+//finding the normals
+
+
+
+void calibrate3d(cVector3d a,cVector3d b,cVector3d c,cVector3d A,cVector3d B,cVector3d C){
+    double scaling_factor;
+    cMatrix3d rotate1,rotate2;
+    cVector3d translate,normal, normal_v;
+    scaling_factor = scale1(a,b,c,A,B,C);
+    normal = normal_find(A,B,C);
+  cout<<"Normal Real: "<<normal<<endl;
+
+    //applying scale to the three points
+    a = a*scaling_factor;
+    b = b*scaling_factor;
+    c = c*scaling_factor;
+
+    rotate1 = rotateNorm(a,b,c,A,B,C);
+
+    //applying the rotation 1 (aligning the normal vectors of the plane)
+  //changing mulr to mul
+    rotate1.mul(a);
+    rotate1.mul(b);
+    rotate1.mul(c);
+
+  normal_v = normal_find(a,b,c);
+  cout<<"Normal Virtual: "<<normal_v<<endl;
+
+    translate = translate1(a,A);
+
+    //applying the translation (making one point coincide with the physical skull's point)
+    a.add(translate);
+    b.add(translate);
+    c.add(translate);
+
+    rotate2 = rotatePlan(a,b,B,normal);
+
+    cout<<"Scaling Factor:    "<<scaling_factor<<endl;
+    //Applying changes to the mesh
+     m_meshVentricles->scaleXYZ(scaling_factor, scaling_factor, scaling_factor);
+     m_meshThirdVentricles->scaleXYZ(scaling_factor, scaling_factor, scaling_factor);
+     m_meshThalastriateVein->scaleXYZ(scaling_factor, scaling_factor, scaling_factor);
+     m_meshChoroidPlexus->scaleXYZ(scaling_factor, scaling_factor, scaling_factor);
+  m_voxelBrainSkull->scaleXYZ(scaling_factor,scaling_factor,scaling_factor);
+
+    m_meshVentricles->setLocalTransform(rotate1);
+    m_meshThirdVentricles->setLocalTransform(rotate1);
+    m_meshThalastriateVein->setLocalTransform(rotate1);
+    m_meshChoroidPlexus->setLocalTransform(rotate1);
+  m_voxelBrainSkull->setLocalTransform(rotate1);
+
+
+    m_meshVentricles->translate(translate);
+    m_meshThirdVentricles->translate(translate);
+    m_meshThalastriateVein->translate(translate);
+    m_meshChoroidPlexus->translate(translate);
+  m_voxelBrainSkull->translate(translate);
+
+    m_meshVentricles->setLocalTransform(rotate2);
+    m_meshThirdVentricles->setLocalTransform(rotate2);
+    m_meshThalastriateVein->setLocalTransform(rotate2);
+    m_meshChoroidPlexus->setLocalTransform(rotate2);
+  m_voxelBrainSkull->setLocalTransform(rotate2);
+
+}
