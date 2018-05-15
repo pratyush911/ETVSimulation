@@ -51,9 +51,9 @@ cVector3d realPoint1, realPoint2, realPoint3;
 // realPoint3 = 0.000....;
 
 
-cVector3d virPoint1(0.0304499, -0.029876, 0.0134008);
-cVector3d virPoint2(0.00123148, -0.00484516, 0.0368253);
-cVector3d virPoint3(-0.02011791, -0.0330365, 0.0254311);
+cVector3d virPoint1(0.0324499, -0.030197, 0.0196008);
+cVector3d virPoint2(0.00112148, -0.00480966, 0.0376946);
+cVector3d virPoint3(-0.0271661, -0.0330365, 0.0254311);
 
 enum MouseStates
 {
@@ -485,7 +485,29 @@ int main(int argc, char* argv[])
 
     // create a large sphere that represents the haptic device
     deviceRadius = 0.01;
-    
+    //device = new cShapeSphere(deviceRadius);
+    //world->addChild(device);
+    //device->m_material->m_ambient.set(1.0f, 0.4f, 0.4f, 0.5f);
+    //device->m_material->m_diffuse.set(1.0f, 0.7f, 0.7f, 0.5f);
+    // device->m_material->m_specular.set(1.0f, 1.0f, 1.0f, 0.5f);
+    //device->m_material->setShininess(0);
+    //device->setUseTransparency(true);
+    //device->setShowEnabled(false);
+
+//    _device = new cToolCursor(world);
+//    world->addChild(_device);
+//    _device->setHapticDevice(hapticDevice);
+//    _device->setRadius(0.03);
+//    _device->setWorkspaceRadius(1.0);
+//    _device->enableDynamicObjects(true);
+//    _device->setWaitForSmallForce(true);
+//    //_device->setLocalPos(cVector3d(-0.001, 0, 0.001));
+//    _device->start();
+
+    //_device->setShowFrame(true);
+
+
+    // interaction stiffness between tool and deformable model
     stiffness = 20;
 
 
@@ -646,33 +668,33 @@ int main(int argc, char* argv[])
     m_meshChoroidPlexus->m_meshes->at(0)->m_material->setTextureLevel(0.9);
     m_meshChoroidPlexus->computeBTN();
     m_meshChoroidPlexus->setLocalPos(cVector3d(0.19, -0.04, -0.24));
-    m_meshChoroidPlexus->getMesh(0)->setUseTransparency(true);
-    m_meshChoroidPlexus->getMesh(0)->setTransparencyLevel(0.6);
+    //m_meshChoroidPlexus->getMesh(0)->setUseTransparency(true);
+    //m_meshChoroidPlexus->getMesh(0)->setTransparencyLevel(0.6);
 
 
-    compute collision detection algorithm
-    m_meshVentricles->createAABBCollisionDetector(0.01);
+    // compute collision detection algorithm
+    //m_meshVentricles->createAABBCollisionDetector(0.01);
 
-    define a default stiffness for the object
-    m_meshVentricles->setStiffness(0.8 * maxStiffness, true);
+    // define a default stiffness for the object
+    //m_meshVentricles->setStiffness(0.8 * maxStiffness, true);
 
-    m_meshVentricles->m_meshes->at(0)->setUseTexture(false);
-    m_meshVentricles->m_meshes->at(0)->m_material->setRedSalmon();
-    m_meshVentricles->m_meshes->at(0)->m_material->setShininess(100);
-    m_meshVentricles->m_meshes->at(0)->m_material->setTextureLevel(0.9);
+    //m_meshVentricles->m_meshes->at(0)->setUseTexture(false);
+    //m_meshVentricles->m_meshes->at(0)->m_material->setRedSalmon();
+    //m_meshVentricles->m_meshes->at(0)->m_material->setShininess(100);
+    //m_meshVentricles->m_meshes->at(0)->m_material->setTextureLevel(0.9);
 
-    m_meshVentricles->m_meshes->at(1)->m_material->setRedDark();
-    m_meshVentricles->m_meshes->at(1)->m_material->setShininess(100);
-    m_meshVentricles->m_meshes->at(1)->m_material->setTextureLevel(0.9);
-
-
+    //m_meshVentricles->m_meshes->at(1)->m_material->setRedDark();
+    //m_meshVentricles->m_meshes->at(1)->m_material->setShininess(100);
+    //m_meshVentricles->m_meshes->at(1)->m_material->setTextureLevel(0.9);
 
 
-    make the outside of the tooth rendered in semi-transparent
-    m_meshVentricles->getMesh(0)->setUseTransparency(true);
-    m_meshVentricles->getMesh(0)->setTransparencyLevel(0.9);
-    m_meshVentricles->getMesh(1)->setUseTransparency(true);
-    m_meshVentricles->getMesh(1)->setTransparencyLevel(0.9);
+
+
+    // make the outside of the tooth rendered in semi-transparent
+    // m_meshVentricles->getMesh(0)->setUseTransparency(true);
+    // m_meshVentricles->getMesh(0)->setTransparencyLevel(0.9);
+    // m_meshVentricles->getMesh(1)->setUseTransparency(true);
+    // m_meshVentricles->getMesh(1)->setTransparencyLevel(0.9);
 
 
 
@@ -720,9 +742,9 @@ int main(int argc, char* argv[])
     m_voxelBrainSkull->m_minTextureCoord.set(0.0, 0.0, 0.0);
     m_voxelBrainSkull->m_maxTextureCoord.set(1.0, 1.0, 1.0);
     // set haptic properties
-    m_voxelBrainSkull->m_material->setStiffness(0.6 * maxStiffness);
-    m_voxelBrainSkull->m_material->setStaticFriction(0.4);
-    m_voxelBrainSkull->m_material->setDynamicFriction(0.4);
+    //m_voxelBrainSkull->m_material->setStiffness(0.6 * maxStiffness);
+    //m_voxelBrainSkull->m_material->setStaticFriction(0.4);
+    //m_voxelBrainSkull->m_material->setDynamicFriction(0.4);
     // enable materials
     m_voxelBrainSkull->setUseMaterial(true);
     // set material
@@ -1171,7 +1193,215 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
         //m_meshSkull->setLocalPos(d);
         cout << "d " << d << endl;
     }
-    
+    else if (a_key == GLFW_KEY_LEFT)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+
+        d = m_meshSkull->getLocalPos();
+        d = cVector3d(d.x() - 0.01, d.y(), d.z());
+        //m_meshSkull->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+
+    else if (a_key == GLFW_KEY_UP)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x(), d.y() + 0.01, d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+
+        d = m_meshSkull->getLocalPos();
+        d = cVector3d(d.x() , d.y() + 0.01, d.z());
+        //m_meshSkull->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+    else if (a_key == GLFW_KEY_DOWN)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        m_meshChoroidPlexus->setLocalPos(d);
+
+        d = m_meshSkull->getLocalPos();
+        d = cVector3d(d.x() , d.y() - 0.01, d.z());
+        //m_meshSkull->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+
+    else if (a_key == GLFW_KEY_PAGE_UP)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x(), d.y() , d.z() + 0.01);
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        m_meshChoroidPlexus->setLocalPos(d);
+
+        d = m_meshSkull->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() + 0.01);
+        //m_meshSkull->setLocalPos(d);
+
+        cout << "d " << d << endl;
+    }
+    else if (a_key == GLFW_KEY_PAGE_DOWN)
+    {
+        cVector3d d = m_meshVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshVentricles->setLocalPos(d);
+
+        d = m_meshThirdVentricles->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshThirdVentricles->setLocalPos(d);
+
+        d = m_meshThalastriateVein->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshThalastriateVein->setLocalPos(d);
+
+
+        d = m_meshChoroidPlexus->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        m_meshChoroidPlexus->setLocalPos(d);
+
+        d = m_meshSkull->getLocalPos();
+        d = cVector3d(d.x() , d.y() , d.z() - 0.01);
+        //m_meshSkull->setLocalPos(d);
+        cout << "d " << d << endl;
+    }
+
+
+	// checking rotation //Aditya
+	else if (a_key == GLFW_KEY_R)
+	{
+    rotate_z = 0;
+		rotate_x = 1;
+		rotate_y = 0;
+    rotate_val = 5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshSkull -> rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_T)
+	{
+    rotate_z = 0;
+		rotate_x = 1;
+		rotate_y = 0;
+    rotate_val = -5;
+		// rotate_x = rotate_x-5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshSkull -> rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_Y)
+	{
+    rotate_z = 0;
+		rotate_x = 0;
+		rotate_y = 1;
+    rotate_val = 5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshSkull -> rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_U)
+	{
+    rotate_z = 0;
+    rotate_x = 0;
+    rotate_y = 1;
+    rotate_val = -5;
+    m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshSkull -> rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_I)
+	{
+    rotate_z = 1;
+		rotate_x = 0;
+		rotate_y = 0;
+    rotate_val = 5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshSkull -> rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+	else if (a_key == GLFW_KEY_O)
+	{
+    rotate_z = 1;
+		rotate_x = 0;
+		rotate_y = 0;
+    rotate_val = -5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+    m_meshSkull -> rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+	// 	else if (a_key == GLFW_KEY_E)
+	// {
+	// 	rotate_z = 0;
+	// 	rotate_x = 0;
+	// 	rotate_y = 0;
+	// // 	m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	// // 	m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	// // 	m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	// // 	m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	// }
 	else if (a_key == GLFW_KEY_L)
 	{
 		cVector3d pos;
@@ -1195,7 +1425,310 @@ void keyCallback(GLFWwindow* a_window, int a_key, int a_scancode, int a_action, 
     // cout<<m_meshThalastriateVeinVentricles->getLocalRot()<<endl<<endl;
     // cout<<m_meshChoroidPlexus->getLocalRot()<<endl<<endl;
 	}
-  
+  // else if (a_key == GLFW_KEY_7)
+	// {
+	// 	skull_scale += 0.5;
+  //   m_meshSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+  //   m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+	// 	cout<<"scale :"<<skull_scale<<endl;
+	// }
+  // else if (a_key == GLFW_KEY_8)
+	// {
+	// 	skull_scale -= 0.5;
+  //   m_meshSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+  //   m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+	// 	cout<<"scale :"<<skull_scale<<endl;
+	// }
+  // else if (a_key == GLFW_KEY_8)
+	// {
+	// 	rotateFlag = !(rotateFlag);
+	// }
+	/*
+    else if (a_key == GLFW_KEY_P)
+	{
+	initialPos = me_Y: "<<rot.getCol1()<<endl;
+	cout<<"ROTATION_Z: "<<rot.getCol2()<<endl;
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	}
+	else if (a_key == GLFW_KEY_W)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() + 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_S)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() - 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_A)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() - 1 , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_D)
+    {
+		cVector3d posshEndoscope->getLocalPos();
+	cout<<"\n****************************************\n";
+	cout<<initialPos<<endl;
+	cout<<offsetPos<<endl;
+	offsetPos.sub(initialPos);
+	cout<<initialPos<<endl;
+	cout<<offsetPos<<endl;
+	cout<<"\n****************************************\n";
+	//cout<<"Orientation : "<<rotate_x<<" ,"<<rotate_y<<" ,"<<rotate_z<<endl;
+	cVector3d pos = meshEndoscope->getLocalPos();
+    cMatrix3d rot = meshEndoscope->getLocalRot();
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	cout<<"COORDINATES: "<<pos.get(0)<<", "<<pos.get(1)<<", "<<pos.get(2)<<", "<<endl;
+	//cout<<"ROTATION_X: "<<rot.get(0,0)<<", "<<rot.get(0,1)<<", "<<rot.get(0,2)<<", "<<endl;
+	//cout<<"ROTATION_Y: "<<rot.get(1,0)<<", "<<rot.get(1,1)<<", "<<rot.get(1,2)<<", "<<endl;
+	//cout<<"ROTATION_Z: "<<rot.get(2,0)<<", "<<rot.get(2,1)<<", "<<rot.get(2,2)<<", "<<endl;
+	cout<<"ROTATION_X: "<<rot.getCol0()<<endl;
+	cout<<"ROTATION_Y: "<<rot.getCol1()<<endl;
+	cout<<"ROTATION_Z: "<<rot.getCol2()<<endl;
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	}
+	else if (a_key == GLFW_KEY_W)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() + 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == G// m_meshVentricles->setLocalPos(d);
+    // m_meshThirdVentricles->setLocalPos(d);
+    // m_meshThalastriateVein->setLocalPos(d);
+    // m_meshChoroidPlexus->setLocalPos(d);
+    // m_meshVentricles->setLocalRot(m);
+    // m_meshThirdVentricles->setLocalRot(m);
+    // m_meshThalastriateVein->setLocalRot(m);
+    // m_meshChoroidPlexus->setLocalRot(m);LFW_KEY_S)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() - 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_A)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() - 1 , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_D)
+    {
+		cVector3d poselse if (a_key == GLFW_KEY_R)
+	{
+		rotate_x = rotate_x+5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_T)
+	{
+		rotate_x = rotate_x-5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_Y)
+	{
+		rotate_y = rotate_y+5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_U)
+	{
+		rotate_y = rotate_y-5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_I)
+	{
+		rotate_z = rotate_z+5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+	else if (a_key == GLFW_KEY_O)
+	{
+		rotate_z = rotate_z-5;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+		else if (a_key == GLFW_KEY_E)
+	{
+		rotate_z = 0;
+		rotate_x = 0;
+		rotate_y = 0;
+		m_meshVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThirdVentricles->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshThalastriateVein->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+		m_meshChoroidPlexus->rotateAboutGlobalAxisDeg(rotate_x, rotate_y, rotate_z, rotate_val);
+	}
+	else if (a_key == GLFW_KEY_L)
+	{
+		cVector3d pos;
+    cMatrix3d m1,m2,m3,m4;
+		hapticDevice->getPosition(pos);
+		cout<<"position :"<<pos<<endl;
+    // cout<<m_meshVentricles->getLocalPos()<<endl;
+    // cout<<m_meshThirdVentricles->getLocalPos()<<endl;
+    // cout<<m_meshThalastriateVein->getLocalPos()<<endl;
+    // cout<<m_meshChoroidPlexus->getLocalPos()<<endl;
+    m1=m_meshVentricles->getLocalRot();
+    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
+    m1=m_meshThirdVentricles->getLocalRot();
+    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
+    m1=m_meshThalastriateVein->getLocalRot();
+    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
+    m1=m_meshChoroidPlexus->getLocalRot();
+    cout<<"matrix1 : "<<endl<<m1.getRow(0)<<endl<<m1.getRow(1)<<endl<<m1.getRow(2)<<endl;
+    // cout<<m_meshThirdVentricles->getLocalRot()<<endl<<endl;
+    // cout<<m_meshThalastriateVeinVentricles->getLocalRot()<<endl<<endl;
+    // cout<<m_meshChoroidPlexus->getLocalRot()<<endl<<endl;
+	}
+  else if (a_key == GLFW_KEY_7)
+	{
+		skull_scale += 0.5;
+    m_meshSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+    m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+		cout<<"scale :"<<skull_scale<<endl;
+	}-0.0222979, 0.00372431, -0.109716
+  else if (a_key == GLFW_KEY_8)
+	{
+		skull_scale -= 0.5;
+    m_meshSkull->scaleXYZ(skull_scale,skull_scale,skull_scale);
+    m_meshVentricles->scaleXYZ(skull_scale,skull_scale,skull_scale);
+		cout<<"scale :"<<skull_scale<<endl;
+	}
+  else if (a_key == GLFW_KEY_8)
+	{
+		rotateFlag = !(rotateFlag);
+	}
+	/*
+    else if (a_key == GLFW_KEY_P)
+	{
+	initialPos = meshEndoscope->getLocalPos();
+	cout<<"\n****************************************\n";
+	cout<<initialPos<<endl;
+	cout<<offsetPos<<endl;
+	offsetPos.sub(initialPos);
+	cout<<initialPos<<endl;
+	cout<<offsetPos<<endl;
+	cout<<"\n****************************************\n";
+	//cout<<"Orientation : "<<rotate_x<<" ,"<<rotate_y<<" ,"<<rotate_z<<endl;
+	cVector3d pos = meshEndoscope->getLocalPos();
+    cMatrix3d rot = meshEndoscope->getLocalRot();
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	cout<<"COORDINATES: "<<pos.get(0)<<", "<<pos.get(1)<<", "<<pos.get(2)<<", "<<endl;
+	//cout<<"ROTATION_X: "<<rot.get(0,0)<<", "<<rot.get(0,1)<<", "<<rot.get(0,2)<<", "<<endl;
+	//cout<<"ROTATION_Y: "<<rot.get(1,0)<<", "<<rot.get(1,1)<<", "<<rot.get(1,2)<<", "<<endl;
+	//cout<<"ROTATION_Z: "<<rot.get(2,0)<<", "<<rot.get(2,1)<<", "<<rot.get(2,2)<<", "<<endl;
+	cout<<"ROTATION_X: "<<rot.getCol0()<<endl;
+	cout<<"ROTATION_Y: "<<rot.getCol1()<<endl;
+	cout<<"ROTATION_Z: "<<rot.getCol2()<<endl;
+	cout<<"\n*********************ENDOSCOPE ORIENTATION******************************************\n";
+	}
+	else if (a_key == GLFW_KEY_W)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() + 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_S)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() - 1 , pos.y() , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_A)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() - 1 , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_D)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() + 1 , pos.z());
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_I)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() , pos.z() - 1);
+
+		meshEndoscope->setLocalPos(pos);
+    }
+	else if (a_key == GLFW_KEY_O)
+    {
+		cVector3d pos = meshEndoscope->getLocalPos();
+
+		pos = cVector3d(pos.x() , pos.y() , pos.z() - 1);
+
+		meshEndoscope->setLocalPos(pos);
+    }
+*/
+
+// Updates on Thursday 26/2018
+else if (a_key == GLFW_KEY_EQUAL)
+	{
+		float su = 0.9;
+		m_meshVentricles->scaleXYZ(su, su, su);
+		m_meshThirdVentricles->scaleXYZ(su, su, su);
+		m_meshThalastriateVein->scaleXYZ(su, su, su);
+		m_meshChoroidPlexus->scaleXYZ(su, su, su);
+    m_meshSkull -> scaleXYZ(su, su, su);
+	}
+// m_meshVentricles->setLocalPos(d);
+    // m_meshThirdVentricles->setLocalPos(d);
+    // m_meshThalastriateVein->setLocalPos(d);
+    // m_meshChoroidPlexus->setLocalPos(d);
+    // m_meshVentricles->setLocalRot(m);
+    // m_meshThirdVentricles->setLocalRot(m);
+    // m_meshThalastriateVein->setLocalRot(m);
+    // m_meshChoroidPlexus->setLocalRot(m);
+else if (a_key == GLFW_KEY_MINUS)
+	{
+		float su = 1.1;
+		m_meshVentricles->scaleXYZ(su, su, su);
+		m_meshThirdVentricles->scaleXYZ(su, su, su);
+		m_meshThalastriateVein->scaleXYZ(su, su, su);
+		m_meshChoroidPlexus->scaleXYZ(su, su, su);
+    m_meshSkull -> scaleXYZ(su, su, su);
+	}
   // -------------------------------------------------------
 
 else if (a_key == GLFW_KEY_C)
